@@ -1,33 +1,45 @@
-import { vNode, vFile, vMasterNode } from './index';
+import { vNode, vFile, vHomeFolder } from './index';
+import { vBaseFolder } from './vBaseFolder';
 
 export interface vFolder {
   name: string;
-  getAllNodes: () => Array<vNode>;
+  getAllNodes: () => Set<vNode>;
   insertNode: (node: vNode) => void;
   insert: (obj: vFile | vFolder) => void;
-  setNode: (node: vNode) => void;
-  node: vNode;
+  getFullPath: () => string;
+  deleteIt: () => void;
+  deleteObj: (obj: vFile | vFolder) => void;
+  setParent: (newParent: vFolder | vHomeFolder) => void;
 }
 
 export const vFolder = (
   name: string,
-  parent: vNode | vMasterNode = vMasterNode()
+  parent: vFolder | vHomeFolder = vHomeFolder()
 ) => {
-  const nodes: Array<vNode> = [];
+  let inf: any = {};
+  const baseFolder = vBaseFolder(inf);
 
-  const getAllNodes = () => {
-    return nodes;
+  const getFullPath = () => {
+    return parent.getFullPath() + '/' + name;
   };
 
-  const insertNode = (node: vNode) => {
-    nodes.push(node);
+  const deleteIt = () => {
+    parent.deleteObj(inf);
   };
 
-  const insert = (obj: vFolder | vFile) => {
-    insertNode(obj.node);
+  const setParent = (newParent: vFolder | vHomeFolder) => {
+    parent = newParent;
   };
-  let inf: any = { name, getAllNodes, insert, insertNode };
 
-  inf.node = vNode(inf, parent);
+  inf = {
+    name,
+    getAllNodes: baseFolder.getAllNodes,
+    insert: baseFolder.insert,
+    getFullPath,
+    setParent,
+    deleteObj: baseFolder.deleteObj,
+    deleteIt,
+  };
+  baseFolder.setParent(inf);
   return inf;
 };

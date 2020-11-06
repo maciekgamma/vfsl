@@ -1,19 +1,34 @@
-import { vNode, vMasterNode } from './index';
+import { vNode, vHomeFolder, vFolder } from './index';
 
 export interface vFile {
   name: string;
   node: vNode;
-  setNode: (node: vNode) => void;
+  getFullPath: () => string;
+  setParent: (newParent: vFolder | vHomeFolder) => void;
+  deleteIt: () => void;
 }
 
 export const vFile = (
   name: string,
-  parent: vNode | vMasterNode = vMasterNode()
+  parent: vFolder | vHomeFolder = vHomeFolder()
 ) => {
-  const inf: any = {
-    name,
+  const getFullPath = () => {
+    return parent.getFullPath() + '/' + name;
   };
 
-  inf.node = vNode(inf, parent);
+  const setParent = (newParent: vFolder | vHomeFolder) => {
+    parent = newParent;
+  };
+
+  const deleteIt = () => {
+    parent.deleteObj(inf);
+  };
+
+  const inf: any = {
+    name,
+    setParent,
+    getFullPath,
+    deleteIt,
+  };
   return inf;
 };
