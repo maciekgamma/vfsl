@@ -11,6 +11,8 @@ export interface vFolder {
   setParent: (newParent: vFolder | vHomeFolder) => void;
   totalFiles: () => number;
   totalFolders: () => number;
+  getParent: () => vFolder | vHomeFolder;
+  getHomeFolder: () => vHomeFolder;
 }
 
 export const vFolder = (
@@ -32,6 +34,14 @@ export const vFolder = (
     parent = newParent;
   };
 
+  const getParent = () => {
+    return parent;
+  };
+
+  const getHomeFolder = () => {
+    return parent.getHomeFolder();
+  };
+
   inf = {
     name,
     getAllNodes: baseFolder.getAllNodes,
@@ -42,6 +52,8 @@ export const vFolder = (
     totalFiles: baseFolder.totalFiles,
     totalFolders: baseFolder.totalFolders,
     deleteIt,
+    getParent,
+    getHomeFolder,
   };
   baseFolder.setParent(inf);
   return inf;

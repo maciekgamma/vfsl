@@ -82,3 +82,30 @@ test('toltal number of elements in folder', () => {
   expect(folder1.totalFiles()).toEqual(2);
   expect(folder1.totalFolders()).toEqual(1);
 });
+
+test('get home folder', () => {
+  const folder1 = vFolder('somefolder');
+  const folder2 = vFolder('otherfolder');
+  const file1 = vFile('file.txt');
+  const file2 = vFile('file2.txt');
+  folder1.insert(folder2);
+  folder2.insert(file1);
+  folder1.insert(file2);
+  const homeFolder = folder1.getParent();
+  expect(file1.getHomeFolder()).toEqual(homeFolder);
+  expect(file2.getHomeFolder()).toEqual(homeFolder);
+  expect(folder2.getHomeFolder()).toEqual(homeFolder);
+});
+
+test('get parent folder', () => {
+  const folder1 = vFolder('somefolder');
+  const folder2 = vFolder('otherfolder');
+  const file1 = vFile('file.txt');
+  const file2 = vFile('file2.txt');
+  folder1.insert(folder2);
+  folder2.insert(file1);
+  folder1.insert(file2);
+  expect(file1.getParent()).toEqual(folder2);
+  expect(file2.getParent()).toEqual(folder1);
+  expect(folder2.getParent()).toEqual(folder1);
+});

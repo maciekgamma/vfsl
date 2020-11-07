@@ -5,6 +5,8 @@ export interface vFile {
   getFullPath: () => string;
   setParent: (newParent: vFolder | vHomeFolder) => void;
   deleteIt: () => void;
+  getParent: () => vFolder | vHomeFolder;
+  getHomeFolder: () => vHomeFolder;
 }
 
 export const vFile = (
@@ -16,7 +18,7 @@ export const vFile = (
   };
 
   const setParent = (newParent: vFolder | vHomeFolder) => {
-    if (newParent == parent) return; // Avoid infitie loop
+    if (newParent === parent) return; // Avoid infitie loop
     parent.deleteObj?.(inf);
     parent = newParent;
     parent.insert(inf);
@@ -28,10 +30,16 @@ export const vFile = (
     parent = vHomeFolder();
   };
 
+  const getParent = () => {
+    return parent;
+  };
+
   const mustHaveParrent = () => {
-    // console.log(vHomeFolder());
-    if (parent == vHomeFolder()) {
-    }
+    return;
+  };
+
+  const getHomeFolder = () => {
+    return parent.getHomeFolder();
   };
 
   const inf: any = {
@@ -39,6 +47,8 @@ export const vFile = (
     setParent,
     getFullPath,
     deleteIt,
+    getParent,
+    getHomeFolder,
   };
   return inf;
 };
