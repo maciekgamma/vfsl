@@ -1,13 +1,14 @@
-import { vNode, vFile, vFolder } from './index';
+import { vFile, vFolder } from './index';
 import { vHomeFolder } from './vHomeFolder';
 
 export interface vBaseFolder {
   name: string;
   getAllNodes: () => Set<vFolder | vFile>;
-  insertNode: (node: vNode) => void;
   insert: (obj: vFile | vFolder) => void;
   deleteObj: (obj: vFile | vFolder) => void;
   setParent: (obj: vFolder | vHomeFolder) => void;
+  totalFiles: () => number;
+  totalFolders: () => number;
 }
 
 export const vBaseFolder = (parent: vFolder | vHomeFolder) => {
@@ -23,11 +24,33 @@ export const vBaseFolder = (parent: vFolder | vHomeFolder) => {
   };
 
   const deleteObj = (obj: vFile | vFolder) => {
-    console.log(nodes.has(obj));
+    nodes.delete(obj);
   };
 
   const setParent = (obj: vFolder | vHomeFolder) => {
     parent = obj;
+  };
+
+  const totalFiles = () => {
+    let total = 0;
+    for (const node of nodes) {
+      if ('totalFiles' in node) {
+        total += node.totalFiles();
+      } else {
+        total += 1;
+      }
+    }
+    return total;
+  };
+
+  const totalFolders = () => {
+    let total = 0;
+    for (const node of nodes) {
+      if ('totalFolders' in node) {
+        total += 1;
+      }
+    }
+    return total;
   };
 
   let inf: any = {
@@ -36,6 +59,8 @@ export const vBaseFolder = (parent: vFolder | vHomeFolder) => {
     insert,
     deleteObj,
     setParent,
+    totalFiles,
+    totalFolders,
   };
 
   return inf;

@@ -12,3 +12,10 @@ test('structuring folders', () => {
   folder1.insert(folder2);
   expect(folder2.getFullPath()).toEqual('~/f1/f2');
 });
+
+test('adding and removing folder to a folder', () => {
+  const folder1 = vFolder('f1');
+  const folder2 = vFolder('f2');
+  folder1.insert(folder2);
+  expect(folder2.getFullPath()).toEqual('~/f1/f2');
+});

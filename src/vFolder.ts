@@ -1,15 +1,16 @@
-import { vNode, vFile, vHomeFolder } from './index';
+import { vFile, vHomeFolder } from './index';
 import { vBaseFolder } from './vBaseFolder';
 
 export interface vFolder {
   name: string;
-  getAllNodes: () => Set<vNode>;
-  insertNode: (node: vNode) => void;
+  getAllNodes: () => Set<vFolder | vFile>;
   insert: (obj: vFile | vFolder) => void;
   getFullPath: () => string;
   deleteIt: () => void;
   deleteObj: (obj: vFile | vFolder) => void;
   setParent: (newParent: vFolder | vHomeFolder) => void;
+  totalFiles: () => number;
+  totalFolders: () => number;
 }
 
 export const vFolder = (
@@ -38,6 +39,8 @@ export const vFolder = (
     getFullPath,
     setParent,
     deleteObj: baseFolder.deleteObj,
+    totalFiles: baseFolder.totalFiles,
+    totalFolders: baseFolder.totalFolders,
     deleteIt,
   };
   baseFolder.setParent(inf);

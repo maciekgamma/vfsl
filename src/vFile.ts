@@ -1,8 +1,7 @@
-import { vNode, vHomeFolder, vFolder } from './index';
+import { vHomeFolder, vFolder } from './index';
 
 export interface vFile {
   name: string;
-  node: vNode;
   getFullPath: () => string;
   setParent: (newParent: vFolder | vHomeFolder) => void;
   deleteIt: () => void;
@@ -17,11 +16,22 @@ export const vFile = (
   };
 
   const setParent = (newParent: vFolder | vHomeFolder) => {
+    if (newParent == parent) return; // Avoid infitie loop
+    parent.deleteObj?.(inf);
     parent = newParent;
+    parent.insert(inf);
   };
 
   const deleteIt = () => {
+    mustHaveParrent();
     parent.deleteObj(inf);
+    parent = vHomeFolder();
+  };
+
+  const mustHaveParrent = () => {
+    // console.log(vHomeFolder());
+    if (parent == vHomeFolder()) {
+    }
   };
 
   const inf: any = {

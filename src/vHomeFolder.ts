@@ -7,6 +7,8 @@ export interface vHomeFolder {
   deleteObj: (obj: vFile | vFolder) => void;
   insert: (obj: vFile | vFolder) => void;
   getAllNodes: () => Set<vFolder | vFile>;
+  totalFiles: () => number;
+  totalFolders: () => number;
 }
 
 export const vHomeFolder = () => {
@@ -22,7 +24,10 @@ export const vHomeFolder = () => {
     getFullPath,
     getAllNodes: baseFolder.getAllNodes,
     insert: baseFolder.insert,
+    totalFiles: baseFolder.totalFiles,
+    totalFolders: baseFolder.totalFolders,
   };
+
   baseFolder.setParent(inf);
   return inf;
 };
