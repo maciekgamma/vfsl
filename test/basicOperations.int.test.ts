@@ -65,10 +65,13 @@ test('removing empty folder', () => {
   expect(nodes.length).toEqual(0);
 });
 
-test('removing file that is not in any folder', () => {
+test('removing file from a folder', () => {
+  const folder1 = vFolder('somefolder');
   const file1 = vFile('file.txt');
+  folder1.insert(file1);
+  expect(folder1.totalFiles()).toEqual(1);
   file1.deleteIt();
-  expect('xs').toEqual('xs');
+  expect(folder1.totalFiles()).toEqual(0);
 });
 
 test('toltal number of elements in folder', () => {
@@ -108,4 +111,17 @@ test('get parent folder', () => {
   expect(file1.getParent()).toEqual(folder2);
   expect(file2.getParent()).toEqual(folder1);
   expect(folder2.getParent()).toEqual(folder1);
+});
+
+test('get element by name', () => {
+  const folder1 = vFolder('somefolder');
+  const folder2 = vFolder('otherfolder');
+  const file1 = vFile('file.txt');
+  const file2 = vFile('file2.txt');
+  folder1.insert(folder2);
+  folder2.insert(file1);
+  folder1.insert(file2);
+  expect(folder1.getElementByName('file2.txt')).toEqual(file2);
+  expect(folder1.getElementByName('otherfolder')).toEqual(folder2);
+  expect(folder2.getElementByName('file.txt')).toEqual(file1);
 });

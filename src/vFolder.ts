@@ -13,6 +13,7 @@ export interface vFolder {
   totalFolders: () => number;
   getParent: () => vFolder | vHomeFolder;
   getHomeFolder: () => vHomeFolder;
+  getElementByName: (elementName: string) => vFile | vFolder | undefined;
 }
 
 export const vFolder = (
@@ -51,6 +52,7 @@ export const vFolder = (
     deleteObj: baseFolder.deleteObj,
     totalFiles: baseFolder.totalFiles,
     totalFolders: baseFolder.totalFolders,
+    getElementByName: baseFolder.getElementByName,
     deleteIt,
     getParent,
     getHomeFolder,

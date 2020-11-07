@@ -10,6 +10,7 @@ export interface vHomeFolder {
   totalFiles: () => number;
   totalFolders: () => number;
   getHomeFolder: () => vHomeFolder;
+  getElementByName: (elementName: string) => vFile | vFolder | undefined;
 }
 
 export const vHomeFolder = () => {
@@ -31,6 +32,7 @@ export const vHomeFolder = () => {
     insert: baseFolder.insert,
     totalFiles: baseFolder.totalFiles,
     totalFolders: baseFolder.totalFolders,
+    getElementByName: baseFolder.getElementByName,
     getHomeFolder,
   };
 

@@ -25,17 +25,12 @@ export const vFile = (
   };
 
   const deleteIt = () => {
-    mustHaveParrent();
     parent.deleteObj(inf);
     parent = vHomeFolder();
   };
 
   const getParent = () => {
     return parent;
-  };
-
-  const mustHaveParrent = () => {
-    return;
   };
 
   const getHomeFolder = () => {

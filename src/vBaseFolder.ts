@@ -9,6 +9,7 @@ export interface vBaseFolder {
   setParent: (obj: vFolder | vHomeFolder) => void;
   totalFiles: () => number;
   totalFolders: () => number;
+  getElementByName: (elementName: string) => vFile | vFolder | undefined;
 }
 
 export const vBaseFolder = (parent: vFolder | vHomeFolder) => {
@@ -43,6 +44,15 @@ export const vBaseFolder = (parent: vFolder | vHomeFolder) => {
     return total;
   };
 
+  const getElementByName = (elementName: string) => {
+    for (const tmpNode of nodes) {
+      if (tmpNode.name === elementName) {
+        return tmpNode;
+      }
+    }
+    return undefined;
+  };
+
   const totalFolders = () => {
     let total = 0;
     for (const node of nodes) {
@@ -60,6 +70,7 @@ export const vBaseFolder = (parent: vFolder | vHomeFolder) => {
     setParent,
     totalFiles,
     totalFolders,
+    getElementByName,
   };
 
   return inf;
