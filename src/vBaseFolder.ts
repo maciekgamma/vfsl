@@ -54,7 +54,6 @@ export const vBaseFolder = (parent: vFolder | vHomeFolder) => {
   };
 
   let inf: any = {
-    name,
     getAllNodes,
     insert,
     deleteObj,
