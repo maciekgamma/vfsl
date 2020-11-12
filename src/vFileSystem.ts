@@ -5,16 +5,37 @@ import { vHomeFolder } from './vHomeFolder';
 export interface vFileSystem {
   homeFolder: vHomeFolder;
   getElementFromPath: () => vFile | vFolder;
-  //goToDirectory: (newDirectory: string) => void;
+  goToDirectory: (newDirectory: string) => boolean;
   translateDirectory: (newDirectory: string) => string;
+  //validateDirectory : (newDirectory: string) =>
+  listElementsInCurrentDirectory: () => Array<vFile | vFolder>;
+  getCurrentDirectory: () => string;
 }
 
 export const vFileSystem = () => {
   const homeFolder = vHomeFolder();
 
-  const curentDirectory = '~';
+  let curentDirectory = '~';
 
-  //const goToDirectory = (newDirectory: string) => {};
+  const goToDirectory = (newDirectory: string) => {
+    newDirectory = translateDirectory(newDirectory);
+    const tmpElement = getElementFromPath(newDirectory);
+    if (!tmpElement) return false;
+    if ('getElementByName' in tmpElement) {
+      curentDirectory = newDirectory;
+      return true; //succes
+    }
+    return false;
+  };
+
+  const listElementsInCurrentDirectory = () => {
+    const tmpFolder = getElementFromPath(getCurrentDirectory());
+    if (!tmpFolder) return undefined;
+    if ('getAllNodes' in tmpFolder) {
+      return tmpFolder.getAllNodes().keys();
+    }
+    return undefined;
+  };
 
   //const getElementsInCurrentDirectory = () => {};
 
@@ -29,22 +50,33 @@ export const vFileSystem = () => {
 
   const getElementFromPath = (newDirectory: string) => {
     const newDirectoryAsArray = newDirectory.split('/');
-    newDirectoryAsArray.shift(); // Home directory
-    let tmpFolder: vHomeFolder | vFolder = homeFolder;
-    let tmpElement;
-    let tmpFolderName = newDirectoryAsArray.shift();
-    do {
-      if (!tmpFolderName) return undefined;
-      tmpElement = tmpFolder.getElementByName(tmpFolderName);
+    let tmpElementName = newDirectoryAsArray.shift();
+    let tmpFolder = homeFolder;
+    if (!newDirectoryAsArray[0]) return homeFolder;
+    while (newDirectoryAsArray) {
+      tmpElementName = newDirectoryAsArray.shift();
+      let tmpElement = tmpFolder.getElementByName(tmpElementName);
       if (!tmpElement) return;
+      if (!newDirectoryAsArray[0]) return tmpElement;
       if ('getElementByName' in tmpElement) {
         tmpFolder = tmpElement;
+      } else {
+        return tmpElement;
       }
-      tmpFolderName = newDirectoryAsArray.shift();
-    } while (tmpFolderName);
-    return tmpElement;
+    }
   };
 
-  const inf = { homeFolder, getElementFromPath, translateDirectory };
+  const getCurrentDirectory = () => {
+    return curentDirectory;
+  };
+
+  const inf = {
+    homeFolder,
+    getElementFromPath,
+    translateDirectory,
+    listElementsInCurrentDirectory,
+    goToDirectory,
+    getCurrentDirectory,
+  };
   return inf;
 };

@@ -2,6 +2,7 @@ import { vHomeFolder, vFolder } from './index';
 
 export interface vFile {
   name: string;
+  extension: string;
   getFullPath: () => string;
   setParent: (newParent: vFolder | vHomeFolder) => void;
   deleteIt: () => void;
@@ -16,7 +17,7 @@ export const vFile = (
   const getFullPath = () => {
     return parent.getFullPath() + '/' + name;
   };
-
+  let extension = '';
   const setParent = (newParent: vFolder | vHomeFolder) => {
     if (newParent === parent) return; // Avoid infitie loop
     parent.deleteObj?.(inf);
@@ -38,6 +39,7 @@ export const vFile = (
   };
 
   const inf: any = {
+    extension,
     name,
     setParent,
     getFullPath,

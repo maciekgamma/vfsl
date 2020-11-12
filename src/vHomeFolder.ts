@@ -3,6 +3,7 @@ import { vFile } from './vFile';
 import { vFolder } from './vFolder';
 
 export interface vHomeFolder {
+  name: string;
   getFullPath: () => string;
   deleteObj: (obj: vFile | vFolder) => void;
   insert: (obj: vFile | vFolder) => void;
@@ -15,6 +16,7 @@ export interface vHomeFolder {
 
 export const vHomeFolder = () => {
   let inf: any = {};
+  const name = '~';
   const baseFolder = vBaseFolder(inf);
 
   const getFullPath = () => {
@@ -28,6 +30,7 @@ export const vHomeFolder = () => {
   inf = {
     deleteObj: baseFolder.deleteObj,
     getFullPath,
+    name,
     getAllNodes: baseFolder.getAllNodes,
     insert: baseFolder.insert,
     totalFiles: baseFolder.totalFiles,
