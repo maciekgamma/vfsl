@@ -1,5 +1,6 @@
 import { vFile, vFolder } from './index';
 import { vHomeFolder } from './vHomeFolder';
+import events from 'events';
 
 export interface vBaseFolder {
   name: string;
@@ -10,10 +11,18 @@ export interface vBaseFolder {
   totalFiles: () => number;
   totalFolders: () => number;
   getElementByName: (elementName: string) => vFile | vFolder | undefined;
+  eventEmitter: events.EventEmitter;
 }
+
+const eventNames = {
+  contentHasChanged: 'contentHasChanged',
+  nodeAdded: 'nodeAdded',
+  nodeRemoved: 'nodeRemoved',
+};
 
 export const vBaseFolder = (parent: vFolder | vHomeFolder) => {
   const nodes: Set<vFolder | vFile> = new Set();
+  const objEventEmitter = new events.EventEmitter();
 
   const getAllNodes = () => {
     return nodes;
@@ -21,11 +30,18 @@ export const vBaseFolder = (parent: vFolder | vHomeFolder) => {
 
   const insert = (obj: vFolder | vFile) => {
     obj.setParent(parent);
-    nodes.add(obj);
+
+    if (!nodes.has(obj)) {
+      nodes.add(obj);
+      objEventEmitter.emit(eventNames.contentHasChanged);
+      objEventEmitter.emit(eventNames.nodeAdded);
+    }
   };
 
   const deleteObj = (obj: vFile | vFolder) => {
     nodes.delete(obj);
+    objEventEmitter.emit(eventNames.contentHasChanged);
+    objEventEmitter.emit(eventNames.nodeRemoved);
   };
 
   const setParent = (obj: vFolder | vHomeFolder) => {
@@ -71,6 +87,7 @@ export const vBaseFolder = (parent: vFolder | vHomeFolder) => {
     totalFiles,
     totalFolders,
     getElementByName,
+    eventEmitter: objEventEmitter,
   };
 
   return inf;

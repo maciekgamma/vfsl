@@ -1,5 +1,6 @@
 import { vFile, vHomeFolder } from './index';
 import { vBaseFolder } from './vBaseFolder';
+import events from 'events';
 
 export interface vFolder {
   name: string;
@@ -14,6 +15,7 @@ export interface vFolder {
   getParent: () => vFolder | vHomeFolder;
   getHomeFolder: () => vHomeFolder;
   getElementByName: (elementName: string) => vFile | vFolder | undefined;
+  on: (eventNam: string | symbol, listener: Function) => events.EventEmitter;
 }
 
 export const vFolder = (
@@ -56,7 +58,12 @@ export const vFolder = (
     deleteIt,
     getParent,
     getHomeFolder,
+    on: (...args: any) => {
+      baseFolder.eventEmitter.on(...args);
+    },
   };
+  //inf.on('contentHasChanged', () => console.log('aaa'));
+  //baseFolder.eventEmitter.on('contentHasChanged', () => console.log('bbb'));
   baseFolder.setParent(inf);
   return inf;
 };

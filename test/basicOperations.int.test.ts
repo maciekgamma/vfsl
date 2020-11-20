@@ -1,4 +1,4 @@
-import { vFile, vFolder } from '../src';
+import { vFile, vFolder, vHomeFolder } from '../src';
 
 test('folder creating and movign in', () => {
   const file1 = vFile('file.txt');
@@ -124,4 +124,27 @@ test('get element by name', () => {
   expect(folder1.getElementByName('file2.txt')).toEqual(file2);
   expect(folder1.getElementByName('otherfolder')).toEqual(folder2);
   expect(folder2.getElementByName('file.txt')).toEqual(file1);
+});
+
+test('events contentHasChanged, nodeAdded, nodeAdded', () => {
+  const homeFolder = vHomeFolder();
+  const folder1 = vFolder('somefolder');
+  const file1 = vFile('file.txt');
+  const contetHasChangedHandler = jest.fn();
+  const nodeAddedHandler = jest.fn();
+  const nodeRemovedHandler = jest.fn();
+
+  homeFolder.on('contentHasChanged', contetHasChangedHandler);
+  homeFolder.on('nodeAdded', nodeAddedHandler);
+  homeFolder.on('nodeRemoved', nodeRemovedHandler);
+  homeFolder.insert(folder1);
+  homeFolder.insert(file1);
+  expect(contetHasChangedHandler).toBeCalledTimes(2);
+  expect(nodeAddedHandler).toBeCalledTimes(2);
+  expect(nodeRemovedHandler).toBeCalledTimes(0);
+  homeFolder.deleteObj(folder1);
+  homeFolder.deleteObj(file1);
+  expect(contetHasChangedHandler).toBeCalledTimes(4);
+  expect(nodeAddedHandler).toBeCalledTimes(2);
+  expect(nodeRemovedHandler).toBeCalledTimes(2);
 });

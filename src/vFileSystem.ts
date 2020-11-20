@@ -7,7 +7,6 @@ export interface vFileSystem {
   getElementFromPath: () => vFile | vFolder;
   goToDirectory: (newDirectory: string) => boolean;
   translateDirectory: (newDirectory: string) => string;
-  //validateDirectory : (newDirectory: string) =>
   listElementsInCurrentDirectory: () => Array<vFile | vFolder>;
   getCurrentDirectory: () => string;
 }
@@ -37,8 +36,6 @@ export const vFileSystem = () => {
     return undefined;
   };
 
-  //const getElementsInCurrentDirectory = () => {};
-
   const translateDirectory = (newDirectory: string) => {
     newDirectory.startsWith('~');
     if (!newDirectory.startsWith('~')) {
@@ -46,7 +43,6 @@ export const vFileSystem = () => {
     }
     return newDirectory;
   };
-  //const validateDirectory = (newDirectory: string) => {};
 
   const getElementFromPath = (newDirectory: string) => {
     const newDirectoryAsArray = newDirectory.split('/');

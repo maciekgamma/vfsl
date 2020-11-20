@@ -17,7 +17,9 @@ export const vFile = (
   const getFullPath = () => {
     return parent.getFullPath() + '/' + name;
   };
+
   let extension = '';
+
   const setParent = (newParent: vFolder | vHomeFolder) => {
     if (newParent === parent) return; // Avoid infitie loop
     parent.deleteObj?.(inf);
