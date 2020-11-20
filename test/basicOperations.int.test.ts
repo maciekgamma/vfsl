@@ -147,4 +147,46 @@ test('events contentHasChanged, nodeAdded, nodeAdded', () => {
   expect(contetHasChangedHandler).toBeCalledTimes(4);
   expect(nodeAddedHandler).toBeCalledTimes(2);
   expect(nodeRemovedHandler).toBeCalledTimes(2);
+
+  homeFolder.off('contentHasChanged', contetHasChangedHandler);
+  homeFolder.off('nodeAdded', nodeAddedHandler);
+  homeFolder.off('nodeRemoved', nodeRemovedHandler);
+  homeFolder.insert(folder1);
+  homeFolder.insert(file1);
+  expect(contetHasChangedHandler).toBeCalledTimes(4);
+  expect(nodeAddedHandler).toBeCalledTimes(2);
+  expect(nodeRemovedHandler).toBeCalledTimes(2);
+  homeFolder.deleteObj(folder1);
+  homeFolder.deleteObj(file1);
+  expect(contetHasChangedHandler).toBeCalledTimes(4);
+  expect(nodeAddedHandler).toBeCalledTimes(2);
+  expect(nodeRemovedHandler).toBeCalledTimes(2);
+
+  homeFolder.addListener('contentHasChanged', contetHasChangedHandler);
+  homeFolder.addListener('nodeAdded', nodeAddedHandler);
+  homeFolder.addListener('nodeRemoved', nodeRemovedHandler);
+  homeFolder.insert(folder1);
+  homeFolder.insert(file1);
+  expect(contetHasChangedHandler).toBeCalledTimes(6);
+  expect(nodeAddedHandler).toBeCalledTimes(4);
+  expect(nodeRemovedHandler).toBeCalledTimes(2);
+  homeFolder.deleteObj(folder1);
+  homeFolder.deleteObj(file1);
+  expect(contetHasChangedHandler).toBeCalledTimes(8);
+  expect(nodeAddedHandler).toBeCalledTimes(4);
+  expect(nodeRemovedHandler).toBeCalledTimes(4);
+
+  homeFolder.removeListener('contentHasChanged', contetHasChangedHandler);
+  homeFolder.removeListener('nodeAdded', nodeAddedHandler);
+  homeFolder.removeListener('nodeRemoved', nodeRemovedHandler);
+  homeFolder.insert(folder1);
+  homeFolder.insert(file1);
+  expect(contetHasChangedHandler).toBeCalledTimes(8);
+  expect(nodeAddedHandler).toBeCalledTimes(4);
+  expect(nodeRemovedHandler).toBeCalledTimes(4);
+  homeFolder.deleteObj(folder1);
+  homeFolder.deleteObj(file1);
+  expect(contetHasChangedHandler).toBeCalledTimes(8);
+  expect(nodeAddedHandler).toBeCalledTimes(4);
+  expect(nodeRemovedHandler).toBeCalledTimes(4);
 });

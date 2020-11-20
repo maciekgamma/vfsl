@@ -16,6 +16,16 @@ export interface vFolder {
   getHomeFolder: () => vHomeFolder;
   getElementByName: (elementName: string) => vFile | vFolder | undefined;
   on: (eventNam: string | symbol, listener: Function) => events.EventEmitter;
+  off: (eventNam: string | symbol, listener: Function) => events.EventEmitter;
+  eventNames: () => Array<string>;
+  addListener: (
+    eventNam: string | symbol,
+    listener: Function
+  ) => events.EventEmitter;
+  removeListener: (
+    eventNam: string | symbol,
+    listener: Function
+  ) => events.EventEmitter;
 }
 
 export const vFolder = (
@@ -61,9 +71,19 @@ export const vFolder = (
     on: (...args: any) => {
       baseFolder.eventEmitter.on(...args);
     },
+    off: (...args: any) => {
+      baseFolder.eventEmitter.off(...args);
+    },
+    eventNames: () => {
+      baseFolder.eventEmitter.eventNames();
+    },
+    removeListener: (...args: any) => {
+      baseFolder.eventEmitter.removeListener(...args);
+    },
+    addListener: (...args: any) => {
+      baseFolder.eventEmitter.addListener(...args);
+    },
   };
-  //inf.on('contentHasChanged', () => console.log('aaa'));
-  //baseFolder.eventEmitter.on('contentHasChanged', () => console.log('bbb'));
   baseFolder.setParent(inf);
   return inf;
 };
